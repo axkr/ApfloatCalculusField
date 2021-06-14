@@ -18,6 +18,6 @@ public class TestHipparchus extends TestCase {
 	  Apfloat ulp = ApfloatMath.ulp(x.fApfloat);
 	  assertEquals("1e-24", ulp.toString());
       ApfloatElement rC = CarlsonEllipticIntegral.rC(x, y);
-      assertEquals("", rC.toString());
+      assertEquals("7.62626353743812501642456e-1", rC.toString());
   }
 }

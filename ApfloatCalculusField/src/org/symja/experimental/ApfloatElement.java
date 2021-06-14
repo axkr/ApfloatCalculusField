@@ -10,7 +10,6 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 
@@ -388,5 +387,10 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
   @Override
   public FieldSinhCosh<ApfloatElement> sinhCosh() {
     return new FieldSinhCosh<ApfloatElement>(sinh(), cosh());
+  }
+
+  @Override
+  public String toString() {
+    return fApfloat.toString();
   }
 }

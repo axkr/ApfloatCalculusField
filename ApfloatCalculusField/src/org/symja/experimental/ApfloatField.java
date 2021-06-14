@@ -8,7 +8,7 @@ final class ApfloatField implements Field<ApfloatElement> {
 
   @Override
   public ApfloatElement getOne() {
-    return ApfloatElement.valueOf(Apfloat.ONE);
+    return ApfloatElement.valueOf(new Apfloat(1, 25));
   }
 
   /** {@inheritDoc} */
