@@ -4,7 +4,7 @@ import org.apfloat.Apfloat;
 import org.hipparchus.Field;
 
 final class ApfloatField implements Field<ApfloatElement> {
-  public static final Field<ApfloatElement> EXPR_FIELD = new ApfloatField();
+  public static final Field<ApfloatElement> APFLOAT_FIELD = new ApfloatField();
 
   @Override
   public ApfloatElement getOne() {

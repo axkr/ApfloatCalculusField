@@ -121,7 +121,7 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public Field<ApfloatElement> getField() {
-    return ApfloatField.EXPR_FIELD;
+    return ApfloatField.APFLOAT_FIELD;
   }
 
   @Override
@@ -211,7 +211,7 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public ApfloatElement expm1() {
-    return valueOf(ApfloatMath.exp(fApfloat).subtract(Apfloat.ONE));
+    return valueOf(ApfloatMath.exp(fApfloat).subtract(new Apfloat(1, fApfloat.precision())));
   }
 
   @Override
@@ -316,7 +316,7 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public ApfloatElement log1p() {
-    return valueOf(ApfloatMath.log(fApfloat.add(Apfloat.ONE)));
+    return valueOf(ApfloatMath.log(fApfloat.add(new Apfloat(1, fApfloat.precision()))));
   }
 
   @Override
@@ -351,7 +351,11 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public ApfloatElement rint() {
-    return valueOf(ApfloatMath.round(fApfloat, fApfloat.precision(), RoundingMode.HALF_EVEN));
+    return valueOf(apfloatRint(fApfloat));
+  }
+
+  public static Apfloat apfloatRint(Apfloat fApfloat) {
+    return ApfloatMath.round(fApfloat, fApfloat.precision(), RoundingMode.HALF_EVEN);
   }
 
   @Override
