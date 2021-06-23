@@ -6,9 +6,10 @@ import org.hipparchus.Field;
 final class ApcomplexField implements Field<ApcomplexElement> {
   public static final Field<ApcomplexElement> APCOMPLEX_FIELD = new ApcomplexField();
 
+  /** {@inheritDoc} */
   @Override
   public ApcomplexElement getOne() {
-    return ApcomplexElement.valueOf(new Apfloat(1, 25));
+    return ApcomplexElement.valueOf(new Apfloat(1));
   }
 
   /** {@inheritDoc} */

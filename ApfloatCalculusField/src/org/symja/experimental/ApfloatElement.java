@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import org.apfloat.Apcomplex;
 import org.apfloat.Apfloat;
 import org.apfloat.ApfloatMath;
+import org.apfloat.FixedPrecisionApfloatHelper;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -21,24 +22,24 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
     return new ApfloatElement(value);
   }
 
-  public static ApfloatElement valueOf(final double d, long precision) {
-    return new ApfloatElement(d, precision);
+  public static ApfloatElement valueOf(final double d) {
+    return new ApfloatElement(d);
   }
 
-  public static ApfloatElement valueOf(final String value, long precision) {
-    return new ApfloatElement(value, precision);
+  public static ApfloatElement valueOf(final String value) {
+    return new ApfloatElement(value);
   }
 
-  private ApfloatElement(final String value, long precision) {
-    fApfloat = new Apfloat(value, precision);
+  private ApfloatElement(final String value) {
+    fApfloat = ApfloatField.get().valueOf(new Apfloat(value));
   }
 
   private ApfloatElement(final Apfloat value) {
-    fApfloat = value;
+    fApfloat = ApfloatField.get().valueOf(value);
   }
 
-  private ApfloatElement(final double d, long precision) {
-    fApfloat = new Apfloat(d, precision);
+  private ApfloatElement(final double d) {
+    fApfloat = ApfloatField.get().valueOf(new Apfloat(d));
   }
 
   public Apcomplex apcomplexValue(long precision) {
@@ -47,32 +48,32 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public ApfloatElement cos() {
-    return valueOf(ApfloatMath.cos(fApfloat));
+    return valueOf(ApfloatField.get().cos(fApfloat));
   }
 
   @Override
   public ApfloatElement cosh() {
-    return valueOf(ApfloatMath.cosh(fApfloat));
+    return valueOf(ApfloatField.get().cosh(fApfloat));
   }
 
   @Override
   public ApfloatElement exp() {
-    return valueOf(ApfloatMath.exp(fApfloat));
+    return valueOf(ApfloatField.get().exp(fApfloat));
   }
 
   @Override
   public ApfloatElement log() {
-    return valueOf(ApfloatMath.log(fApfloat));
+    return valueOf(ApfloatField.get().log(fApfloat));
   }
 
   @Override
   public ApfloatElement pow(int n) {
-    return valueOf(ApfloatMath.pow(fApfloat, n));
+    return valueOf(ApfloatField.get().pow(fApfloat, n));
   }
 
   @Override
   public ApfloatElement rootN(int n) {
-    return valueOf(ApfloatMath.root(fApfloat, n));
+    return valueOf(ApfloatField.get().root(fApfloat, n));
   }
 
   @Override
@@ -80,43 +81,43 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
     if (isNaN() || isZero()) {
       return this;
     }
-    return valueOf(ApfloatMath.abs(fApfloat));
+    return valueOf(ApfloatField.get().abs(fApfloat));
   }
 
   @Override
   public ApfloatElement sin() {
-    return valueOf(ApfloatMath.sin(fApfloat));
+    return valueOf(ApfloatField.get().sin(fApfloat));
   }
 
   @Override
   public ApfloatElement sinh() {
-    return valueOf(ApfloatMath.sinh(fApfloat));
+    return valueOf(ApfloatField.get().sinh(fApfloat));
   }
 
   @Override
   public ApfloatElement tan() {
-    return valueOf(ApfloatMath.tan(fApfloat));
+    return valueOf(ApfloatField.get().tan(fApfloat));
   }
 
   @Override
   public ApfloatElement tanh() {
-    return valueOf(ApfloatMath.tanh(fApfloat));
+    return valueOf(ApfloatField.get().tanh(fApfloat));
   }
 
   @Override
   public ApfloatElement ulp() {
-    return valueOf(ApfloatMath.ulp(fApfloat));
+    return valueOf(ApfloatField.get().ulp(fApfloat));
   }
 
   @Override
   public ApfloatElement add(ApfloatElement value) throws NullArgumentException {
-    return valueOf(fApfloat.add(value.fApfloat));
+    return valueOf(ApfloatField.get().add(fApfloat, value.fApfloat));
   }
 
   @Override
   public ApfloatElement divide(ApfloatElement value)
       throws NullArgumentException, MathRuntimeException {
-    return valueOf(fApfloat.divide(value.fApfloat));
+    return valueOf(ApfloatField.get().divide(fApfloat, value.fApfloat));
   }
 
   @Override
@@ -126,97 +127,98 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public ApfloatElement multiply(int value) {
-    return valueOf(fApfloat.multiply(new Apfloat(value, fApfloat.precision())));
+    return valueOf(ApfloatField.get().multiply(fApfloat, new Apfloat(value)));
   }
 
   @Override
   public ApfloatElement multiply(ApfloatElement value) throws NullArgumentException {
-    return valueOf(fApfloat.multiply(value.fApfloat));
+    return valueOf(ApfloatField.get().multiply(fApfloat, value.fApfloat));
   }
 
   @Override
   public ApfloatElement negate() {
-    return valueOf(fApfloat.negate());
+    return valueOf(ApfloatField.get().negate(fApfloat));
   }
 
   @Override
   public ApfloatElement subtract(ApfloatElement value) throws NullArgumentException {
-    return valueOf(fApfloat.subtract(value.fApfloat));
+    return valueOf(ApfloatField.get().subtract(fApfloat, value.fApfloat));
   }
 
   @Override
   public ApfloatElement acos() {
-    return valueOf(ApfloatMath.acos(fApfloat));
+    return valueOf(ApfloatField.get().acos(fApfloat));
   }
 
   @Override
   public ApfloatElement acosh() {
-    return valueOf(ApfloatMath.acosh(fApfloat));
+    return valueOf(ApfloatField.get().acosh(fApfloat));
   }
 
   @Override
   public ApfloatElement add(double value) {
-    return valueOf(fApfloat.add(new Apfloat(value, fApfloat.precision())));
+    return valueOf(ApfloatField.get().add(fApfloat, new Apfloat(value)));
   }
 
   @Override
   public ApfloatElement asin() {
-    return valueOf(ApfloatMath.asin(fApfloat));
+    return valueOf(ApfloatField.get().asin(fApfloat));
   }
 
   @Override
   public ApfloatElement asinh() {
-    return valueOf(ApfloatMath.asinh(fApfloat));
+    return valueOf(ApfloatField.get().asinh(fApfloat));
   }
 
   @Override
   public ApfloatElement atan() {
-    return valueOf(ApfloatMath.atan(fApfloat));
+    return valueOf(ApfloatField.get().atan(fApfloat));
   }
 
   @Override
   public ApfloatElement atan2(ApfloatElement value) throws MathIllegalArgumentException {
-    return valueOf(ApfloatMath.atan2(fApfloat, value.fApfloat));
+    return valueOf(ApfloatField.get().atan2(fApfloat, value.fApfloat));
   }
 
   @Override
   public ApfloatElement atanh() {
-    return valueOf(ApfloatMath.atanh(fApfloat));
+    return valueOf(ApfloatField.get().atanh(fApfloat));
   }
 
   @Override
   public ApfloatElement cbrt() {
-    return valueOf(ApfloatMath.cbrt(fApfloat));
+    return valueOf(ApfloatField.get().cbrt(fApfloat));
   }
 
   @Override
   public ApfloatElement ceil() {
-    return valueOf(ApfloatMath.ceil(fApfloat));
+    return valueOf(ApfloatField.get().ceil(fApfloat));
   }
 
   @Override
   public ApfloatElement copySign(ApfloatElement value) {
-    return valueOf(ApfloatMath.copySign(fApfloat, value.fApfloat));
+    return valueOf(ApfloatField.get().copySign(fApfloat, value.fApfloat));
   }
 
   @Override
   public ApfloatElement copySign(double d) {
-    return valueOf(ApfloatMath.copySign(fApfloat, new Apfloat(d, fApfloat.precision())));
+    return valueOf(ApfloatField.get().copySign(fApfloat, new Apfloat(d, fApfloat.precision())));
   }
 
   @Override
   public ApfloatElement divide(double value) {
-    return valueOf(fApfloat.divide(new Apfloat(value, fApfloat.precision())));
+    return valueOf(ApfloatField.get().divide(fApfloat, new Apfloat(value)));
   }
 
   @Override
   public ApfloatElement expm1() {
-    return valueOf(ApfloatMath.exp(fApfloat).subtract(new Apfloat(1, fApfloat.precision())));
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    return valueOf(h.subtract(h.exp(fApfloat), Apfloat.ONE));
   }
 
   @Override
   public ApfloatElement floor() {
-    return valueOf(ApfloatMath.floor(fApfloat));
+    return valueOf(ApfloatField.get().floor(fApfloat));
   }
 
   @Override
@@ -226,16 +228,17 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public ApfloatElement hypot(ApfloatElement y) throws MathIllegalArgumentException {
-    return valueOf(
-        ApfloatMath.sqrt(fApfloat.multiply(fApfloat)).add(y.fApfloat.multiply(y.fApfloat)));
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    return valueOf(h.sqrt(h.multiply(fApfloat, fApfloat)).add(h.multiply(y.fApfloat, y.fApfloat)));
   }
 
   @Override
   public ApfloatElement linearCombination(ApfloatElement[] a, ApfloatElement[] b)
       throws MathIllegalArgumentException {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
     Apfloat result = Apfloat.ZERO;
     for (int i = 0; i < a.length; i++) {
-      result = result.add(a[i].fApfloat.multiply(b[i].fApfloat));
+      result = h.add(result, h.multiply(a[i].fApfloat, b[i].fApfloat));
     }
     return valueOf(result);
   }
@@ -243,11 +246,11 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
   @Override
   public ApfloatElement linearCombination(double[] a, ApfloatElement[] b)
       throws MathIllegalArgumentException {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
     Apfloat result = Apfloat.ZERO;
     if (b.length > 0) {
-      long precision = b[0].fApfloat.precision();
       for (int i = 0; i < a.length; i++) {
-        result = result.add(new Apfloat(a[i], precision).multiply(b[i].fApfloat));
+        result = h.add(result, h.multiply(new Apfloat(a[i]), b[i].fApfloat));
       }
     }
     return valueOf(result);
@@ -311,42 +314,43 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
 
   @Override
   public ApfloatElement log10() {
-    return valueOf(ApfloatMath.log(fApfloat, new Apfloat(10, fApfloat.precision())));
+    return valueOf(ApfloatField.get().log(fApfloat, new Apfloat(10)));
   }
 
   @Override
   public ApfloatElement log1p() {
-    return valueOf(ApfloatMath.log(fApfloat.add(new Apfloat(1, fApfloat.precision()))));
+    return valueOf(ApfloatField.get().log(fApfloat.add(Apfloat.ONE)));
   }
 
   @Override
   public ApfloatElement multiply(double value) {
-    return valueOf(fApfloat.multiply(new Apfloat(value, fApfloat.precision())));
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    return valueOf(h.multiply(fApfloat, new Apfloat(value)));
   }
 
   @Override
   public ApfloatElement pow(double value) {
-    return valueOf(ApfloatMath.pow(fApfloat, new Apfloat(value, fApfloat.precision())));
+    return valueOf(ApfloatField.get().pow(fApfloat, new Apfloat(value)));
   }
 
   @Override
   public ApfloatElement pow(ApfloatElement value) throws MathIllegalArgumentException {
-    return valueOf(ApfloatMath.pow(fApfloat, value.fApfloat));
+    return valueOf(ApfloatField.get().pow(fApfloat, value.fApfloat));
   }
 
   @Override
   public ApfloatElement reciprocal() {
-    return valueOf(ApfloatMath.inverseRoot(fApfloat, 1));
+    return valueOf(ApfloatField.get().inverseRoot(fApfloat, 1));
   }
 
   @Override
   public ApfloatElement remainder(double value) {
-    return valueOf(fApfloat.mod(new Apfloat(value, fApfloat.precision())));
+    return valueOf(ApfloatField.get().mod(fApfloat, new Apfloat(value)));
   }
 
   @Override
   public ApfloatElement remainder(ApfloatElement value) {
-    return valueOf(fApfloat.mod(value.fApfloat));
+    return valueOf(ApfloatField.get().mod(fApfloat, value.fApfloat));
   }
 
   @Override
@@ -355,32 +359,33 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
   }
 
   public static Apfloat apfloatRint(Apfloat fApfloat) {
-    return ApfloatMath.round(fApfloat, fApfloat.precision(), RoundingMode.HALF_EVEN);
+    return ApfloatMath.round(fApfloat, ApfloatField.get().precision(), RoundingMode.HALF_EVEN);
   }
 
   @Override
   public ApfloatElement scalb(int n) {
-    return valueOf(fApfloat.multiply(ApfloatMath.pow(new Apfloat(2), n)));
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    return valueOf(h.multiply(fApfloat, h.pow(new Apfloat(2), n)));
   }
 
   @Override
   public ApfloatElement sqrt() {
-    return valueOf(ApfloatMath.sqrt(fApfloat));
+    return valueOf(ApfloatField.get().sqrt(fApfloat));
   }
 
   @Override
   public ApfloatElement subtract(double value) {
-    return valueOf(fApfloat.subtract(new Apfloat(value, fApfloat.precision())));
+    return valueOf(ApfloatField.get().subtract(fApfloat, new Apfloat(value)));
   }
 
   @Override
   public ApfloatElement abs() {
-    return valueOf(ApfloatMath.abs(fApfloat));
+    return valueOf(ApfloatField.get().abs(fApfloat));
   }
 
   @Override
   public ApfloatElement newInstance(double d) {
-    return valueOf(d, fApfloat.precision());
+    return valueOf(d);
   }
 
   @Override
