@@ -359,7 +359,13 @@ public class ApfloatElement implements CalculusFieldElement<ApfloatElement> {
   }
 
   public static Apfloat apfloatRint(Apfloat fApfloat) {
-    return ApfloatMath.round(fApfloat, ApfloatField.get().precision(), RoundingMode.HALF_EVEN);
+    if (fApfloat.scale() > 0) {
+      return ApfloatMath.round(fApfloat, fApfloat.scale(), RoundingMode.HALF_EVEN);
+    }
+    if (ApfloatMath.abs(fApfloat).compareTo(new Apfloat("0.5")) <= 0) {
+      return Apfloat.ZERO;
+    }
+    return ApfloatMath.copySign(Apfloat.ONE, fApfloat);
   }
 
   @Override

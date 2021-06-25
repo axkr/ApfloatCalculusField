@@ -1,7 +1,13 @@
 package org.symja.experimental;
 
+import java.util.function.Predicate;
+
 import org.apfloat.Apfloat;
 import org.apfloat.FixedPrecisionApfloatHelper;
+import org.hipparchus.linear.BlockFieldMatrix;
+import org.hipparchus.linear.FieldDecompositionSolver;
+import org.hipparchus.linear.FieldLUDecomposition;
+import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 
 import junit.framework.TestCase;
@@ -83,5 +89,48 @@ public class TestHipparchus extends TestCase {
     } finally {
       ApfloatField.remove();
     }
+  }
+
+  public void testInverse001() {
+    FixedPrecisionApfloatHelper helper = new FixedPrecisionApfloatHelper(30);
+    try {
+      ApfloatField.set(helper);
+      // 2.161209223472559 + 1.682941969615793
+      ApcomplexElement x =
+          ApcomplexElement.valueOf(
+              "2.161209223472559", //
+              "1.682941969615793");
+      // 2.161209223472559 - 1.682941969615793
+      ApcomplexElement y =
+          ApcomplexElement.valueOf(
+              "2.161209223472559", //
+              "-1.682941969615793");
+      ApcomplexElement z = ApcomplexElement.valueOf("2.0");
+      ApcomplexElement[][] arr = new ApcomplexElement[2][2];
+      arr[0][0] = z;
+      arr[0][1] = x;
+      arr[1][0] = y;
+      arr[1][1] = z;
+      FieldMatrix<ApcomplexElement> m = new BlockFieldMatrix<ApcomplexElement>(arr);
+      FieldMatrix<ApcomplexElement> s = inverseMatrix(m);
+      assertEquals(
+          "Array2DRowFieldMatrix{" //
+              + "{-5.70919803469126542265150729137e-1,(6.16938572560308485152555018491e-1, 4.80412449271496636143769164508e-1)},"
+              + "{(6.16938572560308485152555018491e-1, -4.80412449271496636143769164508e-1),-5.70919803469126542265150729137e-1}}", //
+          s.toString());
+    } finally {
+      ApfloatField.remove();
+    }
+  }
+
+  private static FieldMatrix<ApcomplexElement> inverseMatrix(FieldMatrix<ApcomplexElement> matrix) {
+    final FieldLUDecomposition<ApcomplexElement> lu =
+        new FieldLUDecomposition<ApcomplexElement>(matrix);
+    FieldDecompositionSolver<ApcomplexElement> solver = lu.getSolver();
+    if (!solver.isNonSingular()) {
+      // Matrix `1` is singular.
+      return null;
+    }
+    return solver.getInverse();
   }
 }
