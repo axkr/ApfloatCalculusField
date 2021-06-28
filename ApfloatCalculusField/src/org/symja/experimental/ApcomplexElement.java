@@ -13,14 +13,12 @@ import org.hipparchus.util.FieldSinhCosh;
 
 public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> {
 
-  Apcomplex fApcomplex;
+  public static ApcomplexElement valueOf(final Apcomplex cmplx) {
+    return new ApcomplexElement(cmplx);
+  }
 
   public static ApcomplexElement valueOf(final Apfloat re, final Apfloat im) {
     return new ApcomplexElement(re, im);
-  }
-
-  public static ApcomplexElement valueOf(final Apcomplex cmplx) {
-    return new ApcomplexElement(cmplx);
   }
 
   public static ApcomplexElement valueOf(final double d) {
@@ -35,15 +33,7 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
     return new ApcomplexElement(valueRe, valueIm);
   }
 
-  private ApcomplexElement(final String value) {
-    FixedPrecisionApfloatHelper h = ApfloatField.get();
-    fApcomplex = h.valueOf(new Apfloat(value));
-  }
-
-  private ApcomplexElement(final String valueRe, final String valueIm) {
-    FixedPrecisionApfloatHelper h = ApfloatField.get();
-    fApcomplex = new Apcomplex(h.valueOf(new Apfloat(valueRe)), h.valueOf(new Apfloat(valueIm)));
-  }
+  Apcomplex fApcomplex;
 
   private ApcomplexElement(final Apcomplex value) {
     fApcomplex = value;
@@ -58,107 +48,19 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
     fApcomplex = h.valueOf(new Apfloat(d));
   }
 
-  public Apcomplex apcomplexValue() {
-    return new Apcomplex(fApcomplex.real(), fApcomplex.imag());
+  private ApcomplexElement(final String value) {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    fApcomplex = h.valueOf(new Apfloat(value));
+  }
+
+  private ApcomplexElement(final String valueRe, final String valueIm) {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    fApcomplex = new Apcomplex(h.valueOf(new Apfloat(valueRe)), h.valueOf(new Apfloat(valueIm)));
   }
 
   @Override
-  public ApcomplexElement cos() {
-    return valueOf(ApfloatField.get().cos(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement cosh() {
-    return valueOf(ApfloatField.get().cosh(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement exp() {
-    return valueOf(ApfloatField.get().exp(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement log() {
-    return valueOf(ApfloatField.get().log(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement pow(int n) {
-    return valueOf(ApfloatField.get().pow(fApcomplex, n));
-  }
-
-  @Override
-  public ApcomplexElement rootN(int n) {
-    return valueOf(ApfloatField.get().root(fApcomplex, n));
-  }
-
-  @Override
-  public ApcomplexElement sign() {
-    if (isNaN() || isZero()) {
-      return this;
-    }
+  public ApcomplexElement abs() {
     return valueOf(ApfloatField.get().abs(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement sin() {
-    return valueOf(ApfloatField.get().sin(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement sinh() {
-    return valueOf(ApfloatField.get().sinh(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement tan() {
-    return valueOf(ApfloatField.get().tan(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement tanh() {
-    return valueOf(ApfloatField.get().tanh(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement ulp() {
-    return valueOf(ApfloatField.get().ulp(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement add(ApcomplexElement value) throws NullArgumentException {
-    return valueOf(ApfloatField.get().add(fApcomplex, value.fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement divide(ApcomplexElement value)
-      throws NullArgumentException, MathRuntimeException {
-    return valueOf(ApfloatField.get().divide(fApcomplex, value.fApcomplex));
-  }
-
-  @Override
-  public Field<ApcomplexElement> getField() {
-    return ApcomplexField.APCOMPLEX_FIELD;
-  }
-
-  @Override
-  public ApcomplexElement multiply(int value) {
-    return valueOf(ApfloatField.get().multiply(fApcomplex, new Apfloat(value)));
-  }
-
-  @Override
-  public ApcomplexElement multiply(ApcomplexElement value) throws NullArgumentException {
-    return valueOf(ApfloatField.get().multiply(fApcomplex, value.fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement negate() {
-    return valueOf(ApfloatField.get().negate(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement subtract(ApcomplexElement value) throws NullArgumentException {
-    return valueOf(ApfloatField.get().subtract(fApcomplex, value.fApcomplex));
   }
 
   @Override
@@ -172,8 +74,17 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
+  public ApcomplexElement add(ApcomplexElement value) throws NullArgumentException {
+    return valueOf(ApfloatField.get().add(fApcomplex, value.fApcomplex));
+  }
+
+  @Override
   public ApcomplexElement add(double value) {
     return valueOf(ApfloatField.get().add(fApcomplex, new Apfloat(value)));
+  }
+
+  public Apcomplex apcomplexValue() {
+    return new Apcomplex(fApcomplex.real(), fApcomplex.imag());
   }
 
   @Override
@@ -247,8 +158,29 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
+  public ApcomplexElement cos() {
+    return valueOf(ApfloatField.get().cos(fApcomplex));
+  }
+
+  @Override
+  public ApcomplexElement cosh() {
+    return valueOf(ApfloatField.get().cosh(fApcomplex));
+  }
+
+  @Override
+  public ApcomplexElement divide(ApcomplexElement value)
+      throws NullArgumentException, MathRuntimeException {
+    return valueOf(ApfloatField.get().divide(fApcomplex, value.fApcomplex));
+  }
+
+  @Override
   public ApcomplexElement divide(double value) {
     return valueOf(ApfloatField.get().divide(fApcomplex, new Apfloat(value)));
+  }
+
+  @Override
+  public ApcomplexElement exp() {
+    return valueOf(ApfloatField.get().exp(fApcomplex));
   }
 
   @Override
@@ -263,6 +195,16 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
     return valueOf(
         h.floor(fApcomplex.real()), //
         h.floor(fApcomplex.imag()));
+  }
+
+  @Override
+  public Field<ApcomplexElement> getField() {
+    return ApcomplexField.APCOMPLEX_FIELD;
+  }
+
+  @Override
+  public ApcomplexElement getPi() {
+    return valueOf(ApfloatField.get().pi());
   }
 
   @Override
@@ -281,39 +223,9 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
-  public ApcomplexElement linearCombination(ApcomplexElement[] a, ApcomplexElement[] b)
-      throws MathIllegalArgumentException {
-    FixedPrecisionApfloatHelper h = ApfloatField.get();
-    Apcomplex result = Apfloat.ZERO;
-    for (int i = 0; i < a.length; i++) {
-      result = h.add(result, h.multiply(a[i].fApcomplex, b[i].fApcomplex));
-    }
-    return valueOf(result);
-  }
-
-  @Override
-  public ApcomplexElement linearCombination(double[] a, ApcomplexElement[] b)
-      throws MathIllegalArgumentException {
-    FixedPrecisionApfloatHelper h = ApfloatField.get();
-    Apcomplex result = Apfloat.ZERO;
-    if (b.length > 0) {
-      for (int i = 0; i < a.length; i++) {
-        result = h.add(result, h.multiply(new Apfloat(a[i]), b[i].fApcomplex));
-      }
-    }
-    return valueOf(result);
-  }
-
-  @Override
   public ApcomplexElement linearCombination(
       ApcomplexElement a1, ApcomplexElement b1, ApcomplexElement a2, ApcomplexElement b2) {
     return linearCombination(new ApcomplexElement[] {a1, a2}, new ApcomplexElement[] {b1, b2});
-  }
-
-  @Override
-  public ApcomplexElement linearCombination(
-      double a1, ApcomplexElement b1, double a2, ApcomplexElement b2) {
-    return linearCombination(new double[] {a1, a2}, new ApcomplexElement[] {b1, b2});
   }
 
   @Override
@@ -326,17 +238,6 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
       ApcomplexElement b3) {
     return linearCombination(
         new ApcomplexElement[] {a1, a2, a3}, new ApcomplexElement[] {b1, b2, b3});
-  }
-
-  @Override
-  public ApcomplexElement linearCombination(
-      double a1,
-      ApcomplexElement b1,
-      double a2,
-      ApcomplexElement b2,
-      double a3,
-      ApcomplexElement b3) {
-    return linearCombination(new double[] {a1, a2, a3}, new ApcomplexElement[] {b1, b2, b3});
   }
 
   @Override
@@ -354,6 +255,34 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
+  public ApcomplexElement linearCombination(ApcomplexElement[] a, ApcomplexElement[] b)
+      throws MathIllegalArgumentException {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    Apcomplex result = Apfloat.ZERO;
+    for (int i = 0; i < a.length; i++) {
+      result = h.add(result, h.multiply(a[i].fApcomplex, b[i].fApcomplex));
+    }
+    return valueOf(result);
+  }
+
+  @Override
+  public ApcomplexElement linearCombination(
+      double a1, ApcomplexElement b1, double a2, ApcomplexElement b2) {
+    return linearCombination(new double[] {a1, a2}, new ApcomplexElement[] {b1, b2});
+  }
+
+  @Override
+  public ApcomplexElement linearCombination(
+      double a1,
+      ApcomplexElement b1,
+      double a2,
+      ApcomplexElement b2,
+      double a3,
+      ApcomplexElement b3) {
+    return linearCombination(new double[] {a1, a2, a3}, new ApcomplexElement[] {b1, b2, b3});
+  }
+
+  @Override
   public ApcomplexElement linearCombination(
       double a1,
       ApcomplexElement b1,
@@ -368,6 +297,24 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
+  public ApcomplexElement linearCombination(double[] a, ApcomplexElement[] b)
+      throws MathIllegalArgumentException {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    Apcomplex result = Apfloat.ZERO;
+    if (b.length > 0) {
+      for (int i = 0; i < a.length; i++) {
+        result = h.add(result, h.multiply(new Apfloat(a[i]), b[i].fApcomplex));
+      }
+    }
+    return valueOf(result);
+  }
+
+  @Override
+  public ApcomplexElement log() {
+    return valueOf(ApfloatField.get().log(fApcomplex));
+  }
+
+  @Override
   public ApcomplexElement log10() {
     return valueOf(ApfloatField.get().log(fApcomplex, new Apfloat(10)));
   }
@@ -379,14 +326,29 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
+  public ApcomplexElement multiply(ApcomplexElement value) throws NullArgumentException {
+    return valueOf(ApfloatField.get().multiply(fApcomplex, value.fApcomplex));
+  }
+
+  @Override
   public ApcomplexElement multiply(double value) {
     FixedPrecisionApfloatHelper h = ApfloatField.get();
     return valueOf(h.multiply(fApcomplex, new Apfloat(value)));
   }
 
   @Override
-  public ApcomplexElement pow(double value) {
-    return valueOf(ApfloatField.get().pow(fApcomplex, new Apfloat(value)));
+  public ApcomplexElement multiply(int value) {
+    return valueOf(ApfloatField.get().multiply(fApcomplex, new Apfloat(value)));
+  }
+
+  @Override
+  public ApcomplexElement negate() {
+    return valueOf(ApfloatField.get().negate(fApcomplex));
+  }
+
+  @Override
+  public ApcomplexElement newInstance(double d) {
+    return valueOf(d);
   }
 
   @Override
@@ -395,16 +357,18 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
-  public ApcomplexElement reciprocal() {
-    return valueOf(ApfloatField.get().inverseRoot(fApcomplex, 1));
+  public ApcomplexElement pow(double value) {
+    return valueOf(ApfloatField.get().pow(fApcomplex, new Apfloat(value)));
   }
 
   @Override
-  public ApcomplexElement remainder(double value) {
-    FixedPrecisionApfloatHelper h = ApfloatField.get();
-    return valueOf(
-        h.mod(fApcomplex.real(), new Apfloat(value)), //
-        h.mod(fApcomplex.imag(), new Apfloat(value)));
+  public ApcomplexElement pow(int n) {
+    return valueOf(ApfloatField.get().pow(fApcomplex, n));
+  }
+
+  @Override
+  public ApcomplexElement reciprocal() {
+    return valueOf(ApfloatField.get().inverseRoot(fApcomplex, 1));
   }
 
   @Override
@@ -425,10 +389,23 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
+  public ApcomplexElement remainder(double value) {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    return valueOf(
+        h.mod(fApcomplex.real(), new Apfloat(value)), //
+        h.mod(fApcomplex.imag(), new Apfloat(value)));
+  }
+
+  @Override
   public ApcomplexElement rint() {
     return valueOf(
         ApfloatElement.apfloatRint(fApcomplex.real()), //
         ApfloatElement.apfloatRint(fApcomplex.imag()));
+  }
+
+  @Override
+  public ApcomplexElement rootN(int n) {
+    return valueOf(ApfloatField.get().root(fApcomplex, n));
   }
 
   @Override
@@ -438,23 +415,16 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
-  public ApcomplexElement sqrt() {
-    return valueOf(ApfloatField.get().sqrt(fApcomplex));
-  }
-
-  @Override
-  public ApcomplexElement subtract(double value) {
-    return valueOf(ApfloatField.get().subtract(fApcomplex, new Apfloat(value)));
-  }
-
-  @Override
-  public ApcomplexElement abs() {
+  public ApcomplexElement sign() {
+    if (isNaN() || isZero()) {
+      return this;
+    }
     return valueOf(ApfloatField.get().abs(fApcomplex));
   }
 
   @Override
-  public ApcomplexElement newInstance(double d) {
-    return valueOf(d);
+  public ApcomplexElement sin() {
+    return valueOf(ApfloatField.get().sin(fApcomplex));
   }
 
   @Override
@@ -463,12 +433,63 @@ public class ApcomplexElement implements CalculusFieldElement<ApcomplexElement> 
   }
 
   @Override
+  public ApcomplexElement sinh() {
+    return valueOf(ApfloatField.get().sinh(fApcomplex));
+  }
+
+  @Override
   public FieldSinhCosh<ApcomplexElement> sinhCosh() {
     return new FieldSinhCosh<ApcomplexElement>(sinh(), cosh());
   }
 
   @Override
+  public ApcomplexElement sqrt() {
+    return valueOf(ApfloatField.get().sqrt(fApcomplex));
+  }
+
+  @Override
+  public ApcomplexElement subtract(ApcomplexElement value) throws NullArgumentException {
+    return valueOf(ApfloatField.get().subtract(fApcomplex, value.fApcomplex));
+  }
+
+  @Override
+  public ApcomplexElement subtract(double value) {
+    return valueOf(ApfloatField.get().subtract(fApcomplex, new Apfloat(value)));
+  }
+
+  @Override
+  public ApcomplexElement tan() {
+    return valueOf(ApfloatField.get().tan(fApcomplex));
+  }
+
+  @Override
+  public ApcomplexElement tanh() {
+    return valueOf(ApfloatField.get().tanh(fApcomplex));
+  }
+
+  @Override
+  public ApcomplexElement toDegrees() {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    return valueOf(
+        ApfloatElement.toDegrees(fApcomplex.real(), h),
+        ApfloatElement.toDegrees(fApcomplex.imag(), h));
+  }
+
+  @Override
+  public ApcomplexElement toRadians() {
+    FixedPrecisionApfloatHelper h = ApfloatField.get();
+    return valueOf(
+        ApfloatElement.toRadians(fApcomplex.real(), h),
+        ApfloatElement.toRadians(fApcomplex.imag(), h));
+  }
+
+  @Override
   public String toString() {
     return fApcomplex.toString();
+  }
+
+  @Override
+  public ApcomplexElement ulp() {
+    return valueOf(ApfloatField.get().ulp(fApcomplex));
   }
 }
